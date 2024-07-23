@@ -1,0 +1,337 @@
+---
+title: "geog276_final_presentation"
+author: "Cali Pfleger"
+date: "3/12/2021"
+output: html_document
+---
+
+#load required packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+
+
+library(lipdR)
+library(geoChronR)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+library(patchwork)
+library(RColorBrewer)
+library(lubridate)
+library(fpp2)
+library(zoo)
+library(anomalize)
+library(Smisc)
+
+library(dygraphs)
+library(here)
+library(readr)
+library(dplyr)
+```
+
+
+# load Iso2k database
+```{r, warning=FALSE, message=FALSE, include=FALSE}
+iso <- readLipd("http://lipdverse.org/iso2k/1_0_0/iso2k1_0_0.zip")
+```
+
+## Use BAM (Banded Age Model) to create an age ensemble
+```{r}
+TS <- extractTs(iso)
+tTS <- tidyTs(TS,age.var = "year") 
+```
+
+
+```{r}
+iTS <-  filter(tTS, paleoData_iso2kPrimaryTimeseries == TRUE) 
+
+pinatubo_iTS <-  filter(tTS, paleoData_iso2kPrimaryTimeseries == TRUE, between(year,1980,2000), paleoData_variableName == "d18O") %>% 
+  dplyr::select(archiveType, dataSetName, geo_latitude, geo_longitude, geo_siteName, interpretation1_inferredMaterial, interpretation1_variable, interpretation1_variableGroup, interpretation2_inferredMaterial, interpretation2_variable, interpretation2_variableGroup, paleoData_description, paleoData_TSid, paleoData_values, paleoData_variableName, year, yearUnits, paleoData_inferredMaterialGroup) 
+ # pivot_wider(names_from = paleoData_TSid, values_from = paleoData_values)
+
+pinatubo_TS <- filter(tTS, paleoData_iso2kPrimaryTimeseries == TRUE,
+              between(year,1980,2000),
+              paleoData_variableName == "d18O") %>% 
+  dplyr::select(archiveType, dataSetName, geo_latitude, geo_longitude, geo_siteName, interpretation1_inferredMaterial, interpretation1_variable, interpretation1_variableGroup, interpretation2_inferredMaterial, interpretation2_variable, interpretation2_variableGroup, paleoData_description, paleoData_TSid, paleoData_values, paleoData_variableName, year, yearUnits, paleoData_inferredMaterialGroup) 
+ # arrange(geo_latitude)
+```
+
+
+```{r}
+pinatubo_tm <- mapTs(pinatubo_iTS,
+      #projection = "stereographic",#for polar projections
+      global = TRUE,
+      color = "archiveType", #color by the archiveType
+      shape = "paleoData_inferredMaterialGroup", #shape by the inferredMaterialGroup
+      size = 2,
+     # bound.circ = TRUE
+      )
+
+print(pinatubo_tm)
+```
+```{r}
+pinatubo_plot.df <- pinatubo_iTS %>%
+  dplyr::group_by(paleoData_TSid) %>% #group by column
+  arrange(pinatubo_plot.df, geo_latitude) %>% 
+  group_by(paleoData_inferredMaterialGroup) 
+```
+
+```{r}
+#Read in time series for Pinatubo 
+test_file <- filter(tTS, paleoData_iso2kPrimaryTimeseries == TRUE,
+                       between(year,1850,2005),
+                       paleoData_variableName == "d18O") %>% 
+  arrange(geo_latitude) 
+
+
+test_file.df <- test_file %>% 
+  dplyr::group_by(paleoData_TSid) %>% #group by column
+  arrange(test_file.df, geo_latitude) %>% 
+  group_by(paleoData_inferredMaterialGroup) 
+```
+
+
+## Plot a stack 
+```{r}
+#Read in time series for Pinatubo 
+pinatubo_iTS <- filter(tTS, paleoData_iso2kPrimaryTimeseries == TRUE,
+                       between(year,1980,2000),
+                       paleoData_variableName == "d18O") %>% 
+  arrange(geo_latitude) 
+
+
+pinatubo_plot.df <- pinatubo_iTS %>% 
+ dplyr::group_by(paleoData_TSid) %>% #group by column
+  arrange(pinatubo_plot.df, geo_latitude) %>% 
+  group_by(paleoData_inferredMaterialGroup) 
+
+
+plotTimeseriesStack(pinatubo_plot.df, #create another plot, storing the output
+                    lab.size = 2,
+                    color.var =  "paleoData_inferredMaterialGroup",
+                    fill.alpha = 0, #make the fill transparent
+                    lab.space = 3, #add it a bit more space between the axis labels and ticks
+                    line.size = 0.4,
+                    color.ramp = c("blue", "dark green", "brown")) 
+
+```
+
+
+```{r}
+coral_test <- test_file.df   %>% 
+  dplyr::select(archiveType, dataSetName, geo_latitude, geo_longitude, geo_siteName, interpretation1_inferredMaterial, interpretation1_variable, interpretation1_variableGroup, interpretation2_inferredMaterial, interpretation2_variable, interpretation2_variableGroup, paleoData_description, paleoData_TSid, paleoData_values, paleoData_variableName, year, yearUnits, paleoData_inferredMaterialGroup) %>% 
+  filter(archiveType == "Coral", 
+         paleoData_variableName == "d18O") %>% 
+  mutate(date = date_decimal(year)) %>% 
+  mutate(date = ymd_hms(date)) 
+```
+
+```{r}
+coral_ann_test <- coral_test %>% 
+  mutate(year_int = floor(year)) %>% 
+  group_by(year_int, dataSetName) %>% 
+  mutate(annomaly = mean(paleoData_values)) %>% 
+  mutate(sd = sd(paleoData_values)) %>% 
+  filter(year_int %in% 1850:2005) 
+```
+
+```{r}
+#bob = spread(coral_ann_test, key = dataSetName, value = paleoData_values)
+library(data.table)
+
+setDT(coral_test)
+frank = dcast(coral_test, date~dataSetName , value.var = 'paleoData_values', fun.aggregate=sum)
+```
+
+```{r}
+setDT(jess)
+frank2 = dcast(jess, new_date~dataSetName , value.var = 'paleoData_values', fun.aggregate=sum)
+
+write_csv(frank2, path = here("research", "test4.csv"), col_names = T)
+```
+
+
+
+```{r}
+coral_ann <- coral %>% 
+  mutate(year_int = floor(year)) %>% 
+  group_by(year_int, dataSetName) %>% 
+  mutate(annomaly = mean(paleoData_values)) %>% 
+  mutate(sd = sd(paleoData_values)) %>% 
+  filter(year_int %in% 1980:2000) %>% 
+  filter(between(paleoData_values, -2,2)) 
+```
+
+
+```{r}
+##Annual coral values?
+jess <- coral_test %>% 
+ # filter(dataSetName == "CO09NUTB") %>%
+  mutate(date = ymd_hms(date))%>%
+  mutate(year_only = year(date),
+         month_only = month(date)
+  ) %>%
+  unite("new_date", year_only:month_only, sep = "-") %>%
+  mutate(new_date = lubridate::ym(new_date))
+```
+
+```{r}
+##Annual coral values?
+geog276 <- coral_ann %>% 
+  filter(dataSetName == "CO09NUTB") %>%
+  mutate(date = ymd_hms(date))%>%
+  mutate(year_only = year(date),
+         month_only = month(date)
+  ) %>%
+  unite("new_date", year_only:month_only, sep = "-") %>%
+  mutate(new_date = lubridate::ym(new_date))
+
+#%>% 
+#filter("CO04BAFI", "CO09NUTB", "CO18DATO01A")
+
+ggplot(data = geog276) +
+  geom_line(aes(x = year_int, y= annomaly, colour =  "Anomaly")) +
+  #geom_line(aes(x = year_int, y= sd, colour =  "SD")) +
+  geom_line(aes(x = year, y= paleoData_values, color= dataSetName)) +
+  #theme(legend.position = "none")  +
+  xlab("Year") +
+  ylab("d18O paleoData_values") +
+  labs(title = "Coral CO09NUTB d18O 1980-2000")
+```
+
+## Move Avg 2 
+
+```{r}
+movAvg = movAvg2(geog276$paleoData_values, bw = 1, type = "l", furthest.weight = 0.25, center.weight = 0.5)
+
+movAvg_df <- as.data.frame(movAvg)
+movAvg_df <- cbind(movAvg_df, "num"=1:nrow(movAvg_df)) 
+
+ggplot() +
+  #geom_line(data = geog276, aes(x = year_int, y= annomaly, colour =  "Anomaly")) +
+  geom_jitter(data = movAvg_df, aes(y = movAvg, x= num)) +
+  #theme(legend.position = "none")  +
+  xlab("Year") +
+  ylab("d18O paleoData_values") +
+  labs(title = "Coral CO09NUTB d18O 1980-2000")
+
+
+print(movAvg)
+plot(movAvg)
+
+filter(geog276$paleoData_values, c(0.5, 1, 0.5) / 2)
+```
+
+## Create a time series
+```{r}
+geog_date <- geog276 %>% 
+  select("new_date",  cols = TRUE)
+
+geog_paleo <- geog276 %>% 
+  select("paleoData_values",  cols = TRUE)
+
+geog_ann <- geog276 %>% 
+  select("annomaly", cols = TRUE)
+
+geog_sd <- geog276 %>% 
+  select("sd", cols = TRUE)
+
+geog_paledate <- cbind(geog_date, geog_paleo, geog_ann, geog_sd) %>% 
+  ungroup()
+
+geog_paleodata <- as.data.frame(geog_paledate)
+
+write_csv(geog_paleodata, path = here("data", "geog_paleodata.csv"), col_names = T)
+
+geog_paleodata2 <- read_csv("data/geog_paleodata.csv")
+
+geog_paleo_df <- as.data.frame(geog_paleodata2)
+```
+
+```{r}
+geog_paleo_ts <- ts(geog_paleo_df, start = c(1980, 1), frequency = 12) #create time series for air temperature 
+plot(geog_paleo_ts) 
+  
+
+  
+geog_movAvg <- geog_paleo_df %>%
+  mutate(smooth_x = movAvg2(geog_paleo_df$paleoData_values, bw = 1, type = "l", furthest.weight = 0.25, center.weight = .5)) %>% 
+  mutate(smooth_x = as.numeric(smooth_x))
+
+geog_movAvg2 <- geog_movAvg %>% 
+   mutate(smooth_x2 = movAvg2(geog_movAvg$smooth_x, bw = 1, type = "l", furthest.weight = 0.25, center.weight = .5)) 
+
+geog_movAvg3 <- geog_movAvg2 %>% 
+   mutate(smooth_x3 = movAvg2(geog_movAvg2$smooth_x2, bw = 1, type = "l", furthest.weight = 0.25, center.weight = .5)) 
+  
+
+
+ggplot() +
+  geom_line(data = geog_paleo_df, aes(x = new_date, y= paleoData_values)) +
+  geom_line(data = geog_movAvg, aes(x = new_date, y= smooth_x, colour =  "Anomaly")) +
+  geom_line(data = geog_movAvg2, aes(x = new_date, y= smooth_x2, colour =  "x2")) +
+  geom_line(data = geog_movAvg3, aes(x = new_date, y= smooth_x3, colour =  "x3")) +
+  #theme(legend.position = "none")  +
+  xlab("Year") +
+  ylab("d18O paleoData_values") +
+  labs(title = "Coral d18O 1980-2000")
+
+plot(1:240, geog_paleo_df$paleoData_values, type = "b", col = "Black", xlab = "Index", ylab = "x")
+lines(1:240, smooth_x, col = "Blue", lwd = 3)
+```
+
+```{r}
+paleo.ts <- ts(geog_paleodata$paleoData_values, start= c(1980-01), frequency = 12)
+
+paleo <- ts(paleo.ts, start= c(1980-01), frequency = 12 )
+plot(paleo.ts)
+plot(paleo)
+
+ggplot(data = geog276, aes(x = new_date, y = paleoData_values)) +
+  geom_line() 
+
+plot.ts(paleo.ts)
+dygraph(paleo.ts)
+
+paleo_filter <- stats::filter(geog_paleodata$paleoData_values, c(0.5, 1, 0.5) / 2)
+
+stats::filter(paleo.ts, c(0.25, 0.5, 0.25))
+
+p0 <- plot(paleo.ts)
+  
+p1 <-plot(paleo_filter)
+
+paleo_filter2 <- stats::filter(paleo_filter, c(0.5, 1, 0.5) / 2)
+
+p2 <-plot(paleo_filter2)
+
+paleo_filter3 <- stats::filter(paleo_filter2, c(0.5, 1, 0.5) / 2)
+
+p3 <-plot(paleo_filter3)
+
+
+```
+
+
+## Decomposing seasonal data 
+
+```{r}
+decomposed <- decompose(geog_paleo_ts)
+
+plot(decomposed)
+
+seasonallyadjusted <- geog_paleo_ts - decomposed$seasonal
+
+plot(seasonallyadjusted)
+```
+
+```{r}
+plot(paleo.ts)
+
+plot(paleo)
+
+plot(stl(paleo, "per"))
+```
+

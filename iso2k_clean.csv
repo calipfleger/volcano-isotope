@@ -1,0 +1,90 @@
+record,lat,lon,site
+CO06LIFI,-16.8167,179.2333,"Savusavu Bay, Fiji"
+CO05BAFI,-16.8167,179.2333,"Savusavu Bay, Fiji"
+CO04LIFI,-16.8167,179.2333,Savusavu Bay
+CO04BAFI,-16.8167,179.2333,"Savusavu Bay, Fiji"
+CO93COTW,1.4167,173.0333,"Tarawa Atoll, Republic of Kiribati"
+CO00URMA,0.933,173,"Maiana Atoll, Republic of Kiribati"
+CO14CABT,3.0731,172.7469,"Butaritari Atoll, Gilbert Islands"
+CO04KIVA,-15.7,167.2,"Malo Channel, Espiritu Santo Island, Vanuatu"
+CO96QUVA,-15,167,"Tangoa Island, Vanuatu"
+CO99GUMI,-0.533,166.9283,Nauru
+CO98QUNC,-22.48,166.45,"Amedee Island, New Caledonia"
+CO12GOVA,-15.94,166.04,Vanuatu
+CO99DRGB,-22.1,153,"Abraham Reef, Great Barrier Reef, Australia"
+CO13HENG,-10.6907,152.8115,"Misima Island, Papua New Guinea"
+CO13HENG,-10.6907,152.8115,"Misima Island, Papua New Guinea"
+CO13HENG,-10.6907,152.8115,"Misima Island, Papua New Guinea"
+CO06QUNG,-4.1916,151.9772,Rabaul
+CO07CAFR,-17.73,148.43,Coral Sea
+CO95TUNG,-5.22,145.82,"Madang, Papua New Guinea"
+CO01TUNG,-5.217,145.817,"Deplik Tabat Reef, Madang Lagoon"
+CO01TUNG,-5.217,145.817,"Deplik Tabat Reef, Madang Lagoon"
+CO05ASGU,13.598,144.836,Guam Coral
+CO04MGNG,-3.6206,143.6819,Papua New Guinea
+CO14OSPA,7.2859,134.2503,Palau
+CO14OSPA,7.2859,134.2503,Palau
+CO03CHBU,-1.5,124.833,Bunaken Island
+CO14CATI,-10.2,123.5167,"Ombai Strait, Timor Island"
+CO17RAPA,18.54,122.15,Palaui Island
+CO17RAPA,18.54,122.15,Palaui Island
+CO17LITW01A,21.9564,120.762,Nanwan Bay
+CO17MUMA,-5.382,117.914,Doangdoangan Besar
+CO03CHBA,-8.2573,115.5757,"Lombok Strait, Bali, Indonesia"
+CO00KUNI,-21.905,113.965,"Ningaloo Reef, West Australia"
+CO99KUHO,-28.4617,113.7683,Houtman Abrolhos Islands
+CO14ZIHO,-28.4589,113.749,Houtman Abrolhos
+CO17XISC01A,19.395,110.7531,Hainan Island
+CO17DESC04A,19.3198,110.692,Hainan Island
+CO17DESC01A,19.308,110.667,Hainan Island
+CO17DESC02A,19.301,110.662,Hainan Island
+CO17DESC03A,19.287,110.656,Hainan Island
+CO13DESC01A,19.287,110.656,Hainan Island
+CO15ABSP,-3.1833,100.5167,Taitaitanopo Island
+CO08ABSU,-0.13,98.52,"Mantawai Islands, West Sumatra, Indonesia"
+CO18HECO01A,-12.087,96.875,Direction Island
+CO18HECO01B,-12.087,96.875,Direction Island
+CO04PFCH,-5.43,71.77,Peros Banhos Atoll
+CO98CHPI,22.6,70,Pirotan Island
+CO97CHSY,-4.6062,55.4244,"Beau Vallon Bay, Mahe Island, Republic of the Seychelles"
+CO04PFRE,-21.0333,55.25,"La Reunion, Southwestern Indian Ocean"
+CO14ZIMG,-23.3572,43.6195,"Tulear Reef, SW Madagascar"
+CO14ZIMG,-23.3572,43.6195,"Tulear Reef, SW Madagascar"
+CO04ZIMG,-23.15,43.58,"Ifaty Reef, SW Madagascar"
+CO00COKY,-3.2556,40.1433,Malindi Marine Park
+CO09NAKY,-3.2,40.1,Malindi
+CO06DATZ,-8.0167,39.5,"Mafia Archipelago, Tanzania"
+CO94HEAQ,29.4333,34.9667,"Aqaba, Jordan"
+CO00FERA,27.85,34.32,"Ras Umm Sidd, Red Sea"
+CO98SWPR,1.6667,7.5833,"Principe, Gulf of Guinea"
+CO06MOPE,16.75,202.8883,"Pedra de Lume, Cape Verde Islands"
+CO06MOTO,11.17,240.85,"Buccoo Reef, Tobago"
+CO10HEIG,16.2,241.49,Guadeloupe
+CO02KUBE,32.47,244.7,"North East Breakers, Bermuda"
+CO05KUBE,32.467,244.7,"North East Breakers, Bermuda"
+CO00DRBE,32.3,244.7,"Northeast Breakers, Bermuda"
+CO08GOBE,30.6486,244.9888,Bermuda south shore
+CO08HEVE,11.77,246.75,"Cayo Sal, Los Roques Archipelago, Venezuela"
+CO08KIPR,17.933,247.001,"Turrumote Reef, La Parguera, Puerto Rico"
+CO17WUBO1A,12.222,248.3998,Northwestern shore
+CO18RELC01A,19.7,260.06,Little Cayman
+CO96SWBB,25.3903,260.1715,"Alinas Reef, Biscayne National Park, Florida"
+CO96SWFB,24.9167,260.75,"Lignumvitae Basin, Florida Bay"
+CO99SWFB,24.9167,260.75,"Lignumvitae Basin, Florida Bay"
+CO94LISE,7.98,262.05,"Secas Island, Gulf of Chiriqui, Panama"
+CO13CAHN,16.0644,266.9508,"Diamond Caye, Utila, Honduras"
+CO13CAHN,16.0644,266.9508,"Diamond Caye, Utila, Honduras"
+CO13CABL,16.1292,268.2497,Belize
+CO92SHPU,-0.6667,269.1667,"Punta pitt, Isla San Cristobal, Galapagos island, Ecuador"
+CO94DUUR,-0.4084,271.234,"Urvina Bay, Galapagos Islands"
+CO99LICL,10.2773,289.2131,Clipperton Atoll
+CO14WUCL,10.3,289.22,Clipperton Atoll
+CO98BOFP,-17.5,329.8333,"Moorea, French Polynesia"
+CO13COXM,1.52,337.24,"Kiritimati Island, Line Islands, Kiribati"
+CO98EVXM,1.6792,337.2473,Kiritimati
+CO13COTB,3.9062,339.2859,Fanning Island (composite)
+CO09NUTB,3.9062,339.2859,Fanning Island
+CO04LIRA,-21.2378,339.8278,"Rarotonga, Cook Islands, South Pacific"
+CO03COPM,5.87,342.13,Palmyra (composite)
+CO11NUPM,5.87,342.13,Palmyra
+CO18DATO01A,-20.2792,354.6423,Fonoifua Island
